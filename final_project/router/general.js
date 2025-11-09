@@ -31,8 +31,8 @@ public_users.get('/', function (req, res) {
 
   new Promise((resolve, reject) => {
     if (books)
-       resolve(books);
-    else 
+      resolve(books);
+    else
       reject("No books found");
   })
 
@@ -51,8 +51,8 @@ public_users.get('/isbn/:isbn', function (req, res) {
     if (book) resolve(book);
     else reject("Book not found");
   })
-  .then(book => res.send(JSON.stringify(book, null, 4)))
-  .catch(err => res.status(404).json({ message: err }));
+    .then(book => res.send(JSON.stringify(book, null, 4)))
+    .catch(err => res.status(404).json({ message: err }));
 
 });
 
@@ -61,12 +61,13 @@ public_users.get('/author/:author', function (req, res) {
 
   const author = decodeURIComponent(req.params.author).toLowerCase();
 
-  let book = Object.values(books).filter(b => b.author.toLowerCase() === author);
-
-  if (book)
-    res.send(book);
-
-  return res.status(404).json({ error: "No book is given by this author." })
+  new Promise((resolve, reject) => {
+    let book = Object.values(books).filter(b => b.author.toLowerCase() === author);
+    if (book) resolve(book);
+    else reject("Book not found");
+  })
+    .then(book => res.send(JSON.stringify(book, null, 4)))
+    .catch(err => res.status(404).json({ message: err }));
 
 });
 
