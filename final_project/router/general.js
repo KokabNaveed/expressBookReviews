@@ -76,12 +76,13 @@ public_users.get('/title/:title', function (req, res) {
 
   const title = decodeURIComponent(req.params.title).toLowerCase();
 
+  new Promise((resolve, reject) => {
   let book = Object.values(books).filter(b => b.title.toLowerCase() === title);
-
-  if (book)
-    res.send(book);
-
-  return res.status(404).json({ error: "No book exists with this title." })
+    if (book) resolve(book);
+    else reject("Book not found");
+  })
+    .then(book => res.send(JSON.stringify(book, null, 4)))
+    .catch(err => res.status(404).json({ message: err }));
 
 });
 
