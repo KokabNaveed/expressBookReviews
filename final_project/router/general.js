@@ -44,8 +44,16 @@ public_users.get('/author/:author', function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+
+  const title = decodeURIComponent(req.params.title).toLowerCase();
+
+  let book = Object.values(books).filter(b=>b.title.toLowerCase()===title);
+
+  if(book)
+    res.send(book);
+
+  return res.status(404).json({ error: "No book exists with this title." })
+
 });
 
 //  Get book review
